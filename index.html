@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
 
-  <!-- Supabase JS v2 -->
+  <!-- Styles & Supabase -->
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
@@ -15,69 +15,72 @@
   <h1>Mini Blog Maker</h1>
   <nav id="auth-bar">
     <span id="user-email"></span>
-    <button id="logout-btn" hidden>Log out</button>
+    <button id="logout-btn" hidden class="btn small">Log out</button>
   </nav>
 </header>
 
 <main>
   <!-- AUTH -->
-  <section id="auth-section">
+  <section id="auth-section" class="card">
     <div class="tabs">
       <button data-tab="login"  class="active">Log in</button>
       <button data-tab="signup">Sign up</button>
       <button data-tab="reset">Reset PW</button>
     </div>
 
-    <form id="login-form">
+    <form id="login-form" class="stack gap">
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password" required />
-      <button type="submit">Log in</button>
+      <button type="submit" class="btn">Log in</button>
     </form>
 
-    <form id="signup-form" hidden>
+    <form id="signup-form" hidden class="stack gap">
       <input type="email"    placeholder="Email" required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
-      <button type="submit">Create account</button>
+      <button type="submit" class="btn">Create account</button>
     </form>
 
-    <form id="reset-form" hidden>
+    <form id="reset-form" hidden class="stack gap">
       <input type="email" placeholder="Email for reset link" required />
-      <button type="submit">Send link</button>
+      <button type="submit" class="btn">Send link</button>
     </form>
 
-    <form id="newpw-form" hidden>
+    <form id="newpw-form" hidden class="stack gap">
       <input type="password" placeholder="New password" required minlength="6" />
-      <button type="submit">Update password</button>
+      <button type="submit" class="btn">Update password</button>
     </form>
 
-    <p id="auth-msg"></p>
+    <p id="auth-msg" class="err"></p>
   </section>
 
   <!-- DASHBOARD -->
-  <section id="dash-section" hidden>
-    <h2>Your Blogs</h2>
-    <ul id="blogs-list"></ul>
-
-    <details>
-      <summary>Add new blog</summary>
-      <form id="new-blog-form">
-        <input  id="blog-title" placeholder="Blog title" required />
-        <textarea id="blog-desc" placeholder="Optional description"></textarea>
-        <button type="submit">Create blog</button>
-        <small id="blog-err" class="err"></small>
-      </form>
-    </details>
-
-    <section id="posts-panel" hidden>
-      <h3 id="posts-heading"></h3>
-      <ul id="posts-list"></ul>
+  <section id="dash-section" hidden class="stack gap">
+    <div class="card">
+      <h2>Your Blogs</h2>
+      <ul id="blogs-list" class="list"></ul>
 
       <details>
-        <summary>Add new post</summary>
-        <form id="new-post-form">
+        <summary class="btn link">Add new blog</summary>
+        <form id="new-blog-form" class="stack gap">
+          <input  id="blog-title" placeholder="Blog title" required />
+          <textarea id="blog-desc" placeholder="Optional description"></textarea>
+          <button type="submit" class="btn">Create blog</button>
+          <small id="blog-err" class="err"></small>
+        </form>
+      </details>
+    </div>
+
+    <!-- Posts -->
+    <section id="posts-panel" hidden class="card">
+      <h3 id="posts-heading"></h3>
+      <ul id="posts-list" class="list"></ul>
+
+      <details>
+        <summary class="btn link">Add new post</summary>
+        <form id="new-post-form" class="stack gap">
           <input id="post-title" placeholder="Post title" required />
           <textarea id="post-content" placeholder="Write something…" required></textarea>
-          <button type="submit">Publish</button>
+          <button type="submit" class="btn">Publish</button>
           <small id="post-err" class="err"></small>
         </form>
       </details>
