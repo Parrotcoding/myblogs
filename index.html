@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini Blog Maker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Mini Blog Maker</h1>
+    <nav id="auth-bar">
+      <span id="user-email"></span>
+      <button id="logout-btn" hidden>Log out</button>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- ---------- AUTH ---------- -->
+    <section id="auth-section">
+      <h2>Sign up / Log in</h2>
+      <form id="auth-form">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required minlength="6" />
+        <button type="submit">Go</button>
+      </form>
+      <p id="auth-msg"></p>
+    </section>
+
+    <!-- ---------- DASHBOARD ---------- -->
+    <section id="dash-section" hidden>
+      <h2>Your Blogs</h2>
+      <ul id="blogs-list"></ul>
+
+      <details>
+        <summary>Add new blog</summary>
+        <form id="new-blog-form">
+          <input type="text" id="blog-title" placeholder="Blog title" required />
+          <textarea id="blog-desc" placeholder="Optional description"></textarea>
+          <button type="submit">Create blog</button>
+        </form>
+      </details>
+
+      <!-- -------- POSTS PANEL -------- -->
+      <section id="posts-panel" hidden>
+        <h3 id="posts-heading"></h3>
+        <ul id="posts-list"></ul>
+
+        <details>
+          <summary>Add new post</summary>
+          <form id="new-post-form">
+            <input type="text" id="post-title" placeholder="Post title" required />
+            <textarea id="post-content" placeholder="Write something…" required></textarea>
+            <button type="submit">Publish</button>
+          </form>
+        </details>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <small>Static demo – powered by Supabase</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
