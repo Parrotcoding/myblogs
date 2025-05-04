@@ -5,7 +5,9 @@
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Styles + Supabase -->
+  <!-- 1 line of defensive CSS to double‑hide any element with [hidden] -->
+  <style>[hidden]{display:none!important}</style>
+
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script src="script.js" defer></script>
@@ -21,7 +23,7 @@
 </header>
 
 <main>
-  <!-- ————————— AUTH ————————— -->
+  <!-- ——— AUTH ——— -->
   <section id="auth-section" class="card">
     <div class="tabs">
       <button data-tab="login"  class="active">Log in</button>
@@ -37,20 +39,20 @@
     </form>
 
     <!-- Sign‑up -->
-    <form id="signup-form" hidden class="stack gap">
+    <form id="signup-form" class="stack gap" hidden>
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
       <button type="submit" class="btn">Create account</button>
     </form>
 
     <!-- Reset -->
-    <form id="reset-form" hidden class="stack gap">
+    <form id="reset-form" class="stack gap" hidden>
       <input type="email" placeholder="Email for reset link" required />
       <button type="submit" class="btn">Send link</button>
     </form>
 
     <!-- New‑password (after recovery link) -->
-    <form id="newpw-form" hidden class="stack gap">
+    <form id="newpw-form" class="stack gap" hidden>
       <input type="password" placeholder="New password" required minlength="6" />
       <button type="submit" class="btn">Update password</button>
     </form>
@@ -58,11 +60,11 @@
     <p id="auth-msg" class="err"></p>
   </section>
 
-  <!-- ————————— DASHBOARD ————————— -->
+  <!-- ——— DASHBOARD (locked) ——— -->
   <section id="dash-section" data-protected hidden class="stack gap">
     <!-- Blogs -->
     <div class="card">
-      <h2>Your Blogs</h2>
+      <h2>Your Blogs</h2>
       <ul id="blogs-list" class="list"></ul>
 
       <details>
@@ -76,7 +78,7 @@
       </details>
     </div>
 
-    <!-- Posts -->
+    <!-- Posts panel -->
     <section id="posts-panel" data-protected hidden class="card">
       <h3 id="posts-heading"></h3>
       <ul id="posts-list" class="list"></ul>
@@ -99,6 +101,5 @@
   <small>Static demo – Supabase Auth</small>
   <span id="status-badge" hidden>!</span>
 </footer>
-
 </body>
 </html>
