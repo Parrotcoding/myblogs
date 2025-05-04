@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mini Blog Maker</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Styles & Supabase -->
+  <!-- 1‑liner to hard‑hide all [hidden] elements -->
+  <style>[hidden]{display:none!important}</style>
+
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
+
 <body>
 <header>
   <h1>Mini Blog Maker</h1>
@@ -20,7 +23,7 @@
 </header>
 
 <main>
-  <!-- AUTH -->
+  <!-- ——— AUTH ——— -->
   <section id="auth-section" class="card">
     <div class="tabs">
       <button data-tab="login"  class="active">Log in</button>
@@ -28,14 +31,14 @@
       <button data-tab="reset">Reset PW</button>
     </div>
 
-    <form id="login-form" class="stack gap">
+    <form id="login-form"  class="stack gap">
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password" required />
       <button type="submit" class="btn">Log in</button>
     </form>
 
     <form id="signup-form" hidden class="stack gap">
-      <input type="email"    placeholder="Email" required />
+      <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
       <button type="submit" class="btn">Create account</button>
     </form>
@@ -53,10 +56,10 @@
     <p id="auth-msg" class="err"></p>
   </section>
 
-  <!-- DASHBOARD -->
+  <!-- ——— DASHBOARD ——— -->
   <section id="dash-section" hidden class="stack gap">
     <div class="card">
-      <h2>Your Blogs</h2>
+      <h2>Your Blogs</h2>
       <ul id="blogs-list" class="list"></ul>
 
       <details>
@@ -70,7 +73,7 @@
       </details>
     </div>
 
-    <!-- Posts -->
+    <!-- Posts panel -->
     <section id="posts-panel" hidden class="card">
       <h3 id="posts-heading"></h3>
       <ul id="posts-list" class="list"></ul>
@@ -78,8 +81,9 @@
       <details>
         <summary class="btn link">Add new post</summary>
         <form id="new-post-form" class="stack gap">
-          <input id="post-title" placeholder="Post title" required />
+          <input id="post-title"   placeholder="Post title" required />
           <textarea id="post-content" placeholder="Write something…" required></textarea>
+          <input type="file" id="post-image" accept="image/*" />
           <button type="submit" class="btn">Publish</button>
           <small id="post-err" class="err"></small>
         </form>
@@ -89,7 +93,7 @@
 </main>
 
 <footer>
-  <small>Static demo – Supabase Auth</small>
+  <small>Static demo – Supabase Auth</small>
   <span id="status-badge" hidden>!</span>
 </footer>
 </body>
