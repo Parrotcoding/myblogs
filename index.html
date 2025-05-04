@@ -5,9 +5,9 @@
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
+
   <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
-  <!-- App logic deferred so DOM is ready -->
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -19,8 +19,8 @@
   </nav>
 </header>
 
-<main id="app">
-  <!-- ‑‑‑ AUTH ‑‑‑ -->
+<main>
+  <!-- AUTH -->
   <section id="auth-section">
     <div class="tabs">
       <button data-tab="login"  class="active">Log in</button>
@@ -35,7 +35,7 @@
     </form>
 
     <form id="signup-form" hidden>
-      <input type="email"    placeholder="Email"    required />
+      <input type="email"    placeholder="Email" required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
       <button type="submit">Create account</button>
     </form>
@@ -53,7 +53,7 @@
     <p id="auth-msg"></p>
   </section>
 
-  <!-- ‑‑‑ DASHBOARD ‑‑‑ -->
+  <!-- DASHBOARD -->
   <section id="dash-section" hidden>
     <h2>Your Blogs</h2>
     <ul id="blogs-list"></ul>
@@ -64,6 +64,7 @@
         <input  id="blog-title" placeholder="Blog title" required />
         <textarea id="blog-desc" placeholder="Optional description"></textarea>
         <button type="submit">Create blog</button>
+        <small id="blog-err" class="err"></small>
       </form>
     </details>
 
@@ -77,6 +78,7 @@
           <input id="post-title" placeholder="Post title" required />
           <textarea id="post-content" placeholder="Write something…" required></textarea>
           <button type="submit">Publish</button>
+          <small id="post-err" class="err"></small>
         </form>
       </details>
     </section>
@@ -84,7 +86,7 @@
 </main>
 
 <footer>
-  <small>Static demo – Supabase Auth</small>
+  <small>Static demo – Supabase Auth</small>
   <span id="status-badge" hidden>!</span>
 </footer>
 </body>
