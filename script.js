@@ -1,6 +1,6 @@
 /* ---------- CONFIG ---------- */
-const supabaseUrl = 'https://YOUR-PROJECT.supabase.co';
-const supabaseAnonKey = 'YOUR-SUPABASE-ANON-KEY';
+const supabaseUrl = 'https://eizwfyfindxzdzijbgxf.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpendmeWZpbmR4emR6aWpiZ3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzEzMjYsImV4cCI6MjA2MTk0NzMyNn0.whdzYdVHDVoZVvbLYkpTc48yP5tt6kNBw0F842Q38vw';
 const supa = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 /* ---------- SHORTCUTS ---------- */
