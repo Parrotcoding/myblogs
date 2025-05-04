@@ -1,16 +1,16 @@
 /* ---------- CONFIG ---------- */
-const supabaseUrl = 'https://eizwfyfindxzdzijbgxf.supabase.co';
+const supabaseUrl  = 'https://eizwfyfindxzdzijbgxf.supabase.co';
 const supabaseAnonKey =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpendmeWZpbmR4emR6aWpiZ3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzEzMjYsImV4cCI6MjA2MTk0NzMyNn0.whdzYdVHDVoZVvbLYkpTc48yP5tt6kNBw0F842Q38vw';
 const supa = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-/* ---------- shortcuts ---------- */
+/* ---------- helpers ---------- */
 const q = s => document.querySelector(s);
 const qa = s => [...document.querySelectorAll(s)];
 const hide = el => (el.hidden = true);
 const show = el => (el.hidden = false);
 
-/* ---------- elems ---------- */
+/* ---------- elements ---------- */
 const authSec=q('#auth-section'), dashSec=q('#dash-section'), postsPan=q('#posts-panel');
 const authMsg=q('#auth-msg'), blogsUl=q('#blogs-list'), postsUl=q('#posts-list');
 const userLbl=q('#user-email'), blogErr=q('#blog-err'), postErr=q('#post-err');
@@ -24,13 +24,13 @@ qa('.tabs button').forEach(btn => btn.onclick = ()=>{
 });
 qa('form[id$="-form"]').forEach(f => f.id==='login-form'?show(f):hide(f));  // default
 
-/* ---------- auth ---------- */
+/* ---------- AUTH ---------- */
 q('#login-btn').onclick = async () => {
   authMsg.textContent='';
   const email = q('#login-form input[type="email"]').value.trim();
   const pw    = q('#login-form input[type="password"]').value.trim();
-  const {error}=await supa.auth.signInWithPassword({ email, password:pw });
-  if(error) authMsg.textContent=error.message;
+  const { error } = await supa.auth.signInWithPassword({ email, password: pw });
+  if (error) authMsg.textContent = error.message;
 };
 
 q('#signup-form').onsubmit = async e=>{
@@ -67,7 +67,7 @@ onSignOut();                     // lock on load
   supa.auth.onAuthStateChange((_e,s)=>s?.user?onSignIn(s.user):onSignOut());
 })();
 
-/* ---------- ui ---------- */
+/* ---------- UI helpers ---------- */
 async function onSignIn(user){
   const {data}=await supa.from('profiles')
                          .select('display_name').eq('id',user.id).single();
@@ -82,7 +82,7 @@ function onSignOut(){
 
 /* ---------- blogs ---------- */
 async function loadBlogs(){
-  const {data:{user}}=await supa.auth.getUser();
+  const {data:{user}} = await supa.auth.getUser();
   if(!user) return;
   const {data,error}=await supa.from('blogs').select('id,title').order('created_at');
   blogsUl.innerHTML=error?`<li class="err">${error.message}</li>`:
@@ -91,13 +91,31 @@ async function loadBlogs(){
     btn.onclick=()=>openBlog(btn.dataset.id,btn.textContent));
 }
 
-q('#new-blog-form').onsubmit = async e=>{
-  e.preventDefault(); blogErr.textContent='';
-  const {data:{user}}=await supa.auth.getUser();
-  if(!user) return blogErr.textContent='Not signed in';
-  const [title,desc]=[...e.target.elements].map(i=>i.value.trim());
-  const {error}=await supa.from('blogs').insert({ owner_id:user.id, title, description:desc });
-  if(error) blogErr.textContent=error.message; else { e.target.reset(); loadBlogs(); }
+q('#new-blog-form').onsubmit = async e => {
+  e.preventDefault();
+  blogErr.textContent = '';
+
+  const { data: { user }, error: authErr } = await supa.auth.getUser();
+  if (authErr || !user) {
+    blogErr.textContent = 'Not signed in';
+    return;
+  }
+
+  const title = q('#blog-title').value.trim();
+  const desc  = q('#blog-desc').value.trim();
+
+  const { error } = await supa
+    .from('blogs')
+    .insert([{ owner_id: user.id, title, description: desc }]);
+
+  if (error) {
+    blogErr.textContent = error.message;
+    console.error('Blog insert failed:', error);
+    return;
+  }
+
+  e.target.reset();
+  await loadBlogs();
 };
 
 /* ---------- posts ---------- */
