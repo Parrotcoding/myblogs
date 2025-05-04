@@ -1,39 +1,36 @@
-/* Basic, pleasant styling – tweak freely */
-:root {
-  --brand: #6366F1;
-  --bg: #fdfdfd;
-  --panel: #ffffff;
-  --border: #e5e7eb;
+:root{
+  --brand:#6366F1;
+  --bg:#f7f7fa;
+  --panel:#fff;
+  --border:#e5e7eb;
+  --error:#EF4444;
 }
+*{box-sizing:border-box;font-family:system-ui,sans-serif;}
+body{margin:0;background:var(--bg);color:#111;}
+header,footer{background:var(--brand);color:#fff;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;}
+h1{margin:0;font-size:1.35rem;flex:1;}
+nav{display:flex;gap:.5rem;align-items:center;}
 
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background: var(--bg);
-  color: #111;
+main{padding:1rem;max-width:720px;margin:auto;}
+section{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:2rem;}
+
+input,textarea,button{padding:.5rem;border:1px solid var(--border);border-radius:4px;font:inherit;}
+button{cursor:pointer;background:var(--brand);color:#fff;border:none;}
+button:hover{opacity:.9;}
+
+.tabs{display:flex;gap:.5rem;margin-bottom:.5rem;}
+.tabs button{flex:1;background:#ebeefb;border:none;padding:.5rem;border-radius:4px;cursor:pointer;}
+.tabs button.active{background:var(--brand);color:#fff;}
+
+ul{list-style:none;padding:0;} li{margin-bottom:.75rem;}
+.blog-btn{background:none;border:none;color:var(--brand);cursor:pointer;font-size:1rem;padding:0;}
+.blog-btn:hover{text-decoration:underline;}
+
+#status-badge{
+  background:var(--error);
+  color:#fff;
+  padding:0 .4rem;
+  border-radius:999px;
+  animation:pulse 1s infinite;
 }
-
-header, footer {
-  padding: 0.75rem 1rem;
-  background: var(--brand);
-  color: #fff;
-}
-h1 { margin: 0; font-size: 1.35rem; }
-nav { display: flex; gap: 0.5rem; align-items: center; }
-
-main { padding: 1rem; max-width: 720px; margin: auto; }
-section { margin-bottom: 2rem; padding: 1rem; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; }
-
-form { display: flex; flex-direction: column; gap: 0.5rem; }
-input, textarea, button {
-  font: inherit; padding: 0.5rem;
-  border: 1px solid var(--border); border-radius: 4px;
-}
-button { cursor: pointer; background: var(--brand); color: #fff; border: none; }
-button:hover { opacity: 0.9; }
-details { margin-top: 1rem; }
-ul { list-style: none; padding: 0; }
-li { margin-bottom: 0.75rem; }
-.blog-btn { background: none; border: none; color: var(--brand); cursor: pointer; font-size: 1rem; padding: 0; }
-.blog-btn:hover { text-decoration: underline; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
