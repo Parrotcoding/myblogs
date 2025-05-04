@@ -5,7 +5,7 @@
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 1 line of defensive CSS to double‑hide any element with [hidden] -->
+  <!-- extra defensive CSS -->
   <style>[hidden]{display:none!important}</style>
 
   <link rel="stylesheet" href="styles.css" />
@@ -26,9 +26,10 @@
   <!-- ——— AUTH ——— -->
   <section id="auth-section" class="card">
     <div class="tabs">
-      <button data-tab="login"  class="active">Log in</button>
-      <button data-tab="signup">Sign up</button>
-      <button data-tab="reset">Reset PW</button>
+      <!--  ▼   added type="button" on each tab  -->
+      <button type="button" data-tab="login"  class="active">Log in</button>
+      <button type="button" data-tab="signup">Sign up</button>
+      <button type="button" data-tab="reset">Reset PW</button>
     </div>
 
     <!-- Log‑in -->
@@ -39,20 +40,20 @@
     </form>
 
     <!-- Sign‑up -->
-    <form id="signup-form" class="stack gap" hidden>
+    <form id="signup-form" hidden class="stack gap">
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
       <button type="submit" class="btn">Create account</button>
     </form>
 
     <!-- Reset -->
-    <form id="reset-form" class="stack gap" hidden>
+    <form id="reset-form" hidden class="stack gap">
       <input type="email" placeholder="Email for reset link" required />
       <button type="submit" class="btn">Send link</button>
     </form>
 
     <!-- New‑password (after recovery link) -->
-    <form id="newpw-form" class="stack gap" hidden>
+    <form id="newpw-form" hidden class="stack gap">
       <input type="password" placeholder="New password" required minlength="6" />
       <button type="submit" class="btn">Update password</button>
     </form>
@@ -78,7 +79,7 @@
       </details>
     </div>
 
-    <!-- Posts panel -->
+    <!-- Posts -->
     <section id="posts-panel" data-protected hidden class="card">
       <h3 id="posts-heading"></h3>
       <ul id="posts-list" class="list"></ul>
