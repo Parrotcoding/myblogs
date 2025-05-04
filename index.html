@@ -5,9 +5,6 @@
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- extra defensive CSS -->
-  <style>[hidden]{display:none!important}</style>
-
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script src="script.js" defer></script>
@@ -26,33 +23,28 @@
   <!-- ——— AUTH ——— -->
   <section id="auth-section" class="card">
     <div class="tabs">
-      <!--  ▼   added type="button" on each tab  -->
-      <button type="button" data-tab="login"  class="active">Log in</button>
-      <button type="button" data-tab="signup">Sign up</button>
-      <button type="button" data-tab="reset">Reset PW</button>
+      <button data-tab="login"  class="active">Log in</button>
+      <button data-tab="signup">Sign up</button>
+      <button data-tab="reset">Reset PW</button>
     </div>
 
-    <!-- Log‑in -->
-    <form id="login-form" class="stack gap">
+    <form id="login-form"  class="stack gap">
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password" required />
       <button type="submit" class="btn">Log in</button>
     </form>
 
-    <!-- Sign‑up -->
     <form id="signup-form" hidden class="stack gap">
       <input type="email"    placeholder="Email"    required />
       <input type="password" placeholder="Password (≥6)" required minlength="6" />
       <button type="submit" class="btn">Create account</button>
     </form>
 
-    <!-- Reset -->
     <form id="reset-form" hidden class="stack gap">
       <input type="email" placeholder="Email for reset link" required />
       <button type="submit" class="btn">Send link</button>
     </form>
 
-    <!-- New‑password (after recovery link) -->
     <form id="newpw-form" hidden class="stack gap">
       <input type="password" placeholder="New password" required minlength="6" />
       <button type="submit" class="btn">Update password</button>
@@ -61,8 +53,8 @@
     <p id="auth-msg" class="err"></p>
   </section>
 
-  <!-- ——— DASHBOARD (locked) ——— -->
-  <section id="dash-section" data-protected hidden class="stack gap">
+  <!-- ——— DASHBOARD (hidden until sign‑in) ——— -->
+  <section id="dash-section" hidden class="stack gap">
     <!-- Blogs -->
     <div class="card">
       <h2>Your Blogs</h2>
@@ -79,8 +71,8 @@
       </details>
     </div>
 
-    <!-- Posts -->
-    <section id="posts-panel" data-protected hidden class="card">
+    <!-- Posts panel -->
+    <section id="posts-panel" hidden class="card">
       <h3 id="posts-heading"></h3>
       <ul id="posts-list" class="list"></ul>
 
