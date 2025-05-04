@@ -145,9 +145,13 @@ async function loadBlogs() {
 
 q('#new-blog-form').onsubmit = async (e) => {
   e.preventDefault(); blogErr.textContent = '';
+
+  /* --- CHANGED LINES: fetch the current user ID correctly --- */
+  const { data: { user } } = await supa.auth.getUser();     // v2 helper
+  if (!user) return (blogErr.textContent = 'Not signed in');
+
   const [title, desc] = [...e.target.elements].map(i => i.value.trim());
-  const uid = supa.auth.user().id;
-  const { error } = await supa.from('blogs').insert({ owner_id: uid, title, description: desc });
+  const { error } = await supa.from('blogs').insert({ owner_id: user.id, title, description: desc });
   if (error) blogErr.textContent = error.message; else e.target.reset();
 };
 
