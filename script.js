@@ -3,15 +3,15 @@ const supabaseUrl = 'https://eizwfyfindxzdzijbgxf.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpendmeWZpbmR4emR6aWpiZ3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzEzMjYsImV4cCI6MjA2MTk0NzMyNn0.whdzYdVHDVoZVvbLYkpTc48yP5tt6kNBw0F842Q38vw';
 const supa = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-/* ------------------------------------------------------------------
-   1.  DOM SHORTCUTS
------------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   1.  DOM HELPERS
+------------------------------------------------------------- */
 const qs  = (s) => document.querySelector(s);
 const qsa = (s) => [...document.querySelectorAll(s)];
-const hide = (el) => el.classList.add('hidden');
-const show = (el) => el.classList.remove('hidden');
+const hide = (el) => (el.hidden = true);
+const show = (el) => (el.hidden = false);
 
-/* UI roots */
+/* Roots */
 const authSection = qs('#auth-section');
 const dashSection = qs('#dash-section');
 const postsPanel  = qs('#posts-panel');
@@ -19,20 +19,27 @@ const authMsg     = qs('#auth-msg');
 const blogsList   = qs('#blogs-list');
 const postsList   = qs('#posts-list');
 const userEmailEl = qs('#user-email');
+const statusBadge = qs('#status-badge');
 
-/* ------------------------------------------------------------------
+/* Keys check */
+if (supabaseUrl.includes('YOUR-PROJECT') || supabaseAnonKey.includes('YOUR-ANON')) {
+  statusBadge.hidden = false;           // red “!” in footer
+  console.warn('⚠️  Replace Supabase URL & anon key in script.js');
+}
+
+/* -------------------------------------------------------------
    2.  TABS
------------------------------------------------------------------- */
+------------------------------------------------------------- */
 qsa('.tabs button').forEach(btn => btn.onclick = () => {
   qsa('.tabs button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  qsa('.auth-form').forEach(hide);
+  qsa('form[id$="-form"]').forEach(hide);
   show(qs(`#${btn.dataset.tab}-form`));
 });
 
-/* ------------------------------------------------------------------
-   3.  AUTH – EMAIL / PASSWORD
------------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   3.  AUTH  (EMAIL + PASSWORD ONLY)
+------------------------------------------------------------- */
 qs('#login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const [email, pw] = [...e.target.elements].map(i => i.value.trim());
@@ -44,9 +51,9 @@ qs('#signup-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const [email, pw] = [...e.target.elements].map(i => i.value.trim());
   const { data, error } = await supa.auth.signUp({ email, password: pw });
-  if (error) return authMsg.textContent = error.message;
+  if (error) return (authMsg.textContent = error.message);
 
-  /* after successful sign‑up, inject profile + starter blog (RPC) */
+  /* profile + starter blog (uses function you already added) */
   await supa.rpc('setup_new_user', {
     new_user_id: data.user.id,
     new_email: email
@@ -54,7 +61,6 @@ qs('#signup-form').addEventListener('submit', async (e) => {
   authMsg.textContent = 'Confirm your email, then log in.';
 });
 
-/* RESET PASSWORD */
 qs('#reset-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = e.target.elements[0].value.trim();
@@ -62,7 +68,6 @@ qs('#reset-form').addEventListener('submit', async (e) => {
   authMsg.textContent = error ? error.message : 'Reset link sent!';
 });
 
-/* NEW PASSWORD (after recovery link) */
 qs('#newpw-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const pw = e.target.elements[0].value.trim();
@@ -71,63 +76,51 @@ qs('#newpw-form').addEventListener('submit', async (e) => {
   if (!error) supa.auth.signOut();
 });
 
-/* LOG‑OUT */
+/* Logout */
 qs('#logout-btn').onclick = () => supa.auth.signOut();
 
-/* ------------------------------------------------------------------
-   4.  INITIAL SESSION CHECK  (fixes “nothing happens” on refresh)
------------------------------------------------------------------- */
-init();
-async function init() {
+/* -------------------------------------------------------------
+   4.  SESSION INIT  +  STATE LISTENER
+------------------------------------------------------------- */
+(async () => {
   const { data: { session } } = await supa.auth.getSession();
   if (session) await onSignIn(session.user);
 
-  /* listen for future changes */
-  supa.auth.onAuthStateChange((_ev, sess) => {
-    if (sess?.user)  onSignIn(sess.user);
-    else             onSignOut();
+  supa.auth.onAuthStateChange((_evt, sess) => {
+    if (sess?.user) onSignIn(sess.user);
+    else            onSignOut();
   });
 
-  /* Handle #access_token in recovery / magic‑link URLs */
+  /* Handle recovery link */
   const params = new URLSearchParams(location.hash.replace('#', '?'));
   if (params.get('type') === 'recovery') {
     authMsg.textContent = 'Enter a new password';
-    qsa('.auth-form').forEach(hide);
+    qsa('form[id$="-form"]').forEach(hide);
     show(qs('#newpw-form'));
     qs('.tabs').style.display = 'none';
   }
-}
+})();
 
-/* ------------------------------------------------------------------
-   5.  SIGN‑IN / SIGN‑OUT  UI HANDLERS
------------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   5.  SIGN‑IN / SIGN‑OUT  UI
+------------------------------------------------------------- */
 async function onSignIn(user) {
-  /* fetch display name from profiles */
   const { data: prof } = await supa
-    .from('profiles')
-    .select('display_name')
-    .eq('id', user.id)
-    .single();
+    .from('profiles').select('display_name').eq('id', user.id).single();
   userEmailEl.textContent = prof?.display_name || user.email;
 
-  authSection.hidden = true;
-  dashSection.hidden = false;
+  hide(authSection);  show(dashSection);
   qs('#logout-btn').hidden = false;
   await loadBlogs();
 }
-
 function onSignOut() {
-  authSection.hidden = false;
-  dashSection.hidden = true;
-  postsPanel.hidden  = true;
-  userEmailEl.textContent = '';
-  blogsList.innerHTML = '';
-  postsList.innerHTML = '';
+  show(authSection); hide(dashSection); hide(postsPanel);
+  userEmailEl.textContent = ''; blogsList.innerHTML = ''; postsList.innerHTML = '';
 }
 
-/* ------------------------------------------------------------------
+/* -------------------------------------------------------------
    6.  BLOGS
------------------------------------------------------------------- */
+------------------------------------------------------------- */
 async function loadBlogs() {
   const { data, error } = await supa
     .from('blogs')
@@ -135,14 +128,11 @@ async function loadBlogs() {
     .order('created_at');
   blogsList.innerHTML = error
     ? `<li>${error.message}</li>`
-    : data.map(b =>
-        `<li><button data-id="${b.id}" class="blog-btn">${b.title}</button></li>`
-      ).join('');
-  blogsList.querySelectorAll('.blog-btn').forEach(btn =>
-    btn.onclick = () => openBlog(btn.dataset.id, btn.textContent)
-  );
+    : data.map(b => `<li><button data-id="${b.id}" class="blog-btn">${b.title}</button></li>`).join('');
+  blogsList
+    .querySelectorAll('.blog-btn')
+    .forEach(btn => (btn.onclick = () => openBlog(btn.dataset.id, btn.textContent)));
 }
-
 qs('#new-blog-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const [title, desc] = [...e.target.elements].map(i => i.value.trim());
@@ -151,16 +141,15 @@ qs('#new-blog-form').addEventListener('submit', async (e) => {
   loadBlogs();
 });
 
-/* ------------------------------------------------------------------
+/* -------------------------------------------------------------
    7.  POSTS
------------------------------------------------------------------- */
+------------------------------------------------------------- */
 async function openBlog(id, title) {
-  postsPanel.hidden = false;
+  show(postsPanel);
   qs('#posts-heading').textContent = `Posts for “${title}”`;
   qs('#new-post-form').dataset.blogId = id;
   await loadPosts(id);
 }
-
 async function loadPosts(blogId) {
   const { data, error } = await supa
     .from('posts')
@@ -176,7 +165,6 @@ async function loadPosts(blogId) {
           <p>${p.content}</p>
         </li>`).join('');
 }
-
 qs('#new-post-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const blogId = e.target.dataset.blogId;
