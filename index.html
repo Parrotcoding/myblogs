@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Mini Blog Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <script src="script.js" defer></script>
@@ -20,7 +19,7 @@
 </header>
 
 <main>
-  <!-- ——— AUTH ——— -->
+  <!-- AUTH card -->
   <section id="auth-section" class="card">
     <div class="tabs">
       <button data-tab="login"  class="active">Log in</button>
@@ -53,11 +52,11 @@
     <p id="auth-msg" class="err"></p>
   </section>
 
-  <!-- ——— DASHBOARD (hidden until sign‑in) ——— -->
+  <!-- DASHBOARD (hidden until auth) -->
   <section id="dash-section" hidden class="stack gap">
     <!-- Blogs -->
     <div class="card">
-      <h2>Your Blogs</h2>
+      <h2>Your Blogs</h2>
       <ul id="blogs-list" class="list"></ul>
 
       <details>
@@ -71,7 +70,7 @@
       </details>
     </div>
 
-    <!-- Posts panel -->
+    <!-- Posts -->
     <section id="posts-panel" hidden class="card">
       <h3 id="posts-heading"></h3>
       <ul id="posts-list" class="list"></ul>
@@ -79,7 +78,7 @@
       <details>
         <summary class="btn link">Add new post</summary>
         <form id="new-post-form" class="stack gap">
-          <input id="post-title"   placeholder="Post title" required />
+          <input id="post-title" placeholder="Post title" required />
           <textarea id="post-content" placeholder="Write something…" required></textarea>
           <input type="file" id="post-image" accept="image/*" />
           <button type="submit" class="btn">Publish</button>
@@ -91,7 +90,7 @@
 </main>
 
 <footer>
-  <small>Static demo – Supabase Auth</small>
+  <small>Static demo – Supabase Auth</small>
   <span id="status-badge" hidden>!</span>
 </footer>
 </body>
